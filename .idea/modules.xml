@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Projects-synkhronos.iml" filepath="$PROJECT_DIR$/.idea/modules/Projects-synkhronos.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Projects-synkhronos_main.iml" filepath="$PROJECT_DIR$/.idea/modules/Projects-synkhronos_main.iml" group="synkhronos" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Projects-synkhronos_test.iml" filepath="$PROJECT_DIR$/.idea/modules/Projects-synkhronos_test.iml" group="synkhronos" />
+      <module fileurl="file://$PROJECT_DIR$/moduleSrc/URLModule/URLModule.iml" filepath="$PROJECT_DIR$/moduleSrc/URLModule/URLModule.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/synkhronos.iml" filepath="$PROJECT_DIR$/.idea/modules/synkhronos.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/synkhronos_main.iml" filepath="$PROJECT_DIR$/.idea/modules/synkhronos_main.iml" group="synkhronos" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/synkhronos_test.iml" filepath="$PROJECT_DIR$/.idea/modules/synkhronos_test.iml" group="synkhronos" />

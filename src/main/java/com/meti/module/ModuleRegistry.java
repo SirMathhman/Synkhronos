@@ -34,13 +34,20 @@ public class ModuleRegistry {
                 ClassLoader classLoader = new URLClassLoader(new URL[]{url});
 
                 Class<?> mainClass = classLoader.loadClass(mainClassName);
-                Method mainMethod = mainClass.getMethod("main", String[].class);
-                int modifiers = mainMethod.getModifiers();
-                if (mainMethod.getReturnType() != void.class || !Modifier.isStatic(modifiers) || Modifier.isPublic(modifiers)) {
-                    throw new NoSuchMethodException("Cannot find main method");
+                Method getLocationMethod = mainClass.getMethod("getLocation");
+                int modifiers = getLocationMethod.getModifiers();
+                if (getLocationMethod.getReturnType() != null || !Modifier.isStatic(modifiers) || Modifier.isPublic(modifiers)) {
+                    throw new NoSuchMethodException("Cannot find getLocation method");
                 }
 
-                mainMethod.invoke(null);
+                Object invokeToken = getLocationMethod.invoke(null);
+                if (invokeToken instanceof URL) {
+                    Module module = new Module(url, mainClassName, (URL) invokeToken);
+                    addModule(module);
+                }
+                else{
+                    throw new NoSuchMethodException("getLocation does not return a URL");
+                }
             }
         }
     }
