@@ -4,56 +4,38 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.jar.Attributes;
 
 public class ModuleRegistry {
     private final Set<Module> modules = new HashSet<>();
 
-    public void load(File location) throws IOException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        if (location.isDirectory()) {
-            File[] files = location.listFiles();
+    public void load(File file) throws IOException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
             if (files != null && files.length != 0) {
-                for (File file : files) {
-                    load(file);
+                for (File f : files) {
+                    load(f);
                 }
             }
         } else {
-            if (location.getPath().contains("jar")) {
+            if (file.getPath().contains("jar")) {
                 //load from jar
-                URL fileURL = new URL("file:" + location.toString());
-                URL jarURL = new URL("jar", "", fileURL + "!/");
-                JarURLConnection connection = (JarURLConnection) jarURL.openConnection();
-                Attributes attributes = connection.getMainAttributes();
-                String mainClassName = attributes.getValue(Attributes.Name.MAIN_CLASS);
-
+                URL fileURL = new URL("file:" + file.toString());
                 ClassLoader classLoader = new URLClassLoader(new URL[]{fileURL});
+                Class<?> c = classLoader.loadClass("Index");
+                Method locationMethod = c.getMethod("getLocation");
+                Method nameMethod = c.getMethod("getName");
 
-                Class<?> mainClass = classLoader.loadClass(mainClassName);
-                Method mainMethod = mainClass.getMethod("main", String[].class);
-                int mainModifiers = mainMethod.getModifiers();
-                if (mainMethod.getReturnType() != void.class || !Modifier.isStatic(mainModifiers) || !Modifier.isPublic(mainModifiers)) {
-                    throw new NoSuchMethodException("Cannot find main method in class " + mainClassName);
-                }
+                Object nameToken = nameMethod.invoke(null);
+                Object locationToken = locationMethod.invoke(null);
+                if (nameToken instanceof String && locationToken instanceof URL) {
+                    String name = (String) nameToken;
+                    URL location = (URL) locationToken;
 
-                Method getLocationMethod = mainClass.getMethod("getLocation");
-                int locationModifiers = getLocationMethod.getModifiers();
-                if (getLocationMethod.getReturnType() == null || !Modifier.isStatic(locationModifiers) || !Modifier.isPublic(locationModifiers)) {
-                    throw new NoSuchMethodException("Cannot find getLocation method in class " + mainClassName);
-                }
-
-                mainMethod.invoke(null, "");
-                Object invokeToken = getLocationMethod.invoke(null);
-                if (invokeToken instanceof URL) {
-                    Module module = new Module(fileURL, mainClassName, (URL) invokeToken);
-                    addModule(module);
-                } else {
-                    throw new NoSuchMethodException("getLocation does not return a URL");
+                    addModule(new Module(fileURL, name, location));
                 }
             }
         }
