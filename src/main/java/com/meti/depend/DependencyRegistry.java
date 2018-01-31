@@ -5,11 +5,11 @@ import javafx.scene.control.ListView;
 import java.util.HashSet;
 import java.util.Set;
 
-public class DependencyRegister {
+public class DependencyRegistry {
     private final Set<Dependency> dependencies = new HashSet<>();
     private final ListView<String> dependencyView;
 
-    public DependencyRegister(ListView<String> dependencyView) {
+    public DependencyRegistry(ListView<String> dependencyView) {
         this.dependencyView = dependencyView;
     }
 

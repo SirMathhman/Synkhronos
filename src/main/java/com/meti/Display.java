@@ -1,6 +1,7 @@
 package com.meti;
 
-import com.meti.depend.DependencyRegister;
+import com.meti.depend.DependencyRegistry;
+import com.meti.module.ModuleRegistry;
 import com.meti.wizard.AddDisplay;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -18,7 +19,8 @@ import java.util.logging.Level;
 public class Display implements Initializable {
     private final URL addLocation = getClass().getResource("wizard\\AddDisplay.fxml");
 
-    private DependencyRegister dependencyRegister;
+    private final ModuleRegistry moduleRegistry = new ModuleRegistry();
+    private DependencyRegistry dependencyRegistry;
 
     @FXML
     private ListView<String> dependencyView;
@@ -47,7 +49,7 @@ public class Display implements Initializable {
             Parent root = loader.load();
 
             AddDisplay display = loader.getController();
-            display.setDependencyRegister(dependencyRegister);
+            display.setDependencyRegistry(dependencyRegistry);
 
             Scene scene = new Scene(root);
             Stage stage = new Stage();
@@ -73,6 +75,8 @@ public class Display implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.dependencyRegister = new DependencyRegister(dependencyView);
+        this.dependencyRegistry = new DependencyRegistry(dependencyView);
+
+
     }
 }

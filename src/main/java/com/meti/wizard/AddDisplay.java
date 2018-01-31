@@ -1,11 +1,11 @@
 package com.meti.wizard;
 
-import com.meti.depend.DependencyRegister;
+import com.meti.depend.DependencyRegistry;
 
 public class AddDisplay {
-    private DependencyRegister dependencyRegister;
+    private DependencyRegistry dependencyRegistry;
 
-    public void setDependencyRegister(DependencyRegister dependencyRegister) {
-        this.dependencyRegister = dependencyRegister;
+    public void setDependencyRegistry(DependencyRegistry dependencyRegistry) {
+        this.dependencyRegistry = dependencyRegistry;
     }
 }
