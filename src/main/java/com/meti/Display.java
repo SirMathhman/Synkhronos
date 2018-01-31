@@ -1,5 +1,6 @@
 package com.meti;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 
@@ -21,6 +22,7 @@ public class Display {
 
     @FXML
     public void close(){
+        Platform.exit();
     }
 
     @FXML
