@@ -3,6 +3,7 @@ package com.meti;
 import com.meti.module.Module;
 import com.meti.module.ModuleRegistry;
 
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 
 public class Default {
@@ -11,8 +12,8 @@ public class Default {
     private Default(){
     }
 
-    public static void loadModules(ModuleRegistry moduleRegistry){
-        Module urlModule = new Module(urlDisplayPath, Index.getName(), Index.getLocation());
+    public static void loadModules(ModuleRegistry moduleRegistry) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        Module urlModule = new Module(Index.class);
         moduleRegistry.addModule(urlModule);
     }
 }

@@ -1,14 +1,16 @@
 package com.meti;
 
-import com.meti.URLDisplay;
-
 import java.net.URL;
 
 public class Index {
     private static final String NAME = "URL";
 
-    public static String getName(){
+    public static String getName() {
         return NAME;
+    }
+
+    public static URL getOptions() {
+        return URLOptions.class.getResource("URLOptions.fxml");
     }
 
     public static URL getLocation() {

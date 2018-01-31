@@ -52,6 +52,7 @@ public class Display implements Initializable {
             Parent root = loader.load();
 
             AddDisplay display = loader.getController();
+            display.setModuleRegistry(moduleRegistry);
             display.setDependencyRegistry(dependencyRegistry);
 
             Scene scene = new Scene(root);
@@ -82,16 +83,15 @@ public class Display implements Initializable {
 
         File moduleDirectory = new File("modules");
         try {
-            if(moduleDirectory.exists()) {
+            if (moduleDirectory.exists()) {
                 this.moduleRegistry.load(moduleDirectory);
-            }
-            else{
+            } else {
                 if (moduleDirectory.mkdirs()) {
                     log(Level.FINE, "Created module directory");
                 }
-
-                Default.loadModules(moduleRegistry);
             }
+
+            Default.loadModules(moduleRegistry);
         } catch (Exception e) {
             log(Level.WARNING, "Failed to load modules", e);
         }

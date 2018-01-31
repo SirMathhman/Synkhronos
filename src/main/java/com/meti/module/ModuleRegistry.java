@@ -3,14 +3,13 @@ package com.meti.module;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ModuleRegistry {
-    private final Set<Module> modules = new HashSet<>();
+    private final Map<String, Module> modules = new HashMap<>();
 
     public void load(File file) throws IOException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         if (file.isDirectory()) {
@@ -26,30 +25,33 @@ public class ModuleRegistry {
                 URL fileURL = new URL("file:" + file.toString());
                 ClassLoader classLoader = new URLClassLoader(new URL[]{fileURL});
                 Class<?> c = classLoader.loadClass("com.meti.Index");
-                Method locationMethod = c.getMethod("getLocation");
-                Method nameMethod = c.getMethod("getName");
-
-                Object nameToken = nameMethod.invoke(null);
-                Object locationToken = locationMethod.invoke(null);
-                if (nameToken instanceof String && locationToken instanceof URL) {
-                    String name = (String) nameToken;
-                    URL location = (URL) locationToken;
-
-                    addModule(new Module(fileURL, name, location));
-                }
+                Module module = new Module(c);
+                addModule(module.getName(), module);
             }
         }
     }
 
-    public boolean addModule(Module module) {
-        return modules.add(module);
+    public Module addModule(String name, Module module) {
+        return modules.put(name, module);
     }
 
-    public boolean removeModule(Module module) {
-        return modules.remove(module);
+    public Module removeModule(String name) {
+        return modules.remove(name);
     }
 
     public void clear() {
         modules.clear();
+    }
+
+    public Map<String, Module> getModules() {
+        return modules;
+    }
+
+    public Module getModule(String name) {
+        return modules.get(name);
+    }
+
+    public void addModule(Module module) {
+        addModule(module.getName(), module);
     }
 }
