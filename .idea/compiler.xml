@@ -2,6 +2,8 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
+      <module name="Projects-synkhronos_main" target="1.8" />
+      <module name="Projects-synkhronos_test" target="1.8" />
       <module name="synkhronos_main" target="1.8" />
       <module name="synkhronos_test" target="1.8" />
     </bytecodeTargetLevel>
