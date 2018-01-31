@@ -1,5 +1,6 @@
 package com.meti.wizard;
 
+import com.meti.Controller;
 import com.meti.Main;
 import com.meti.depend.DependencyRegistry;
 import com.meti.module.Module;
@@ -16,7 +17,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.logging.Level;
 
-public class AddDisplay {
+public class AddDisplay extends Controller {
     private ModuleRegistry moduleRegistry;
     private DependencyRegistry dependencyRegistry;
 
@@ -39,8 +40,7 @@ public class AddDisplay {
                 Parent parent = FXMLLoader.load(selectedModule.getDisplayLocation());
                 Scene scene = new Scene(parent);
                 Stage stage = new Stage();
-                stage.setScene(scene);
-                stage.show();
+                getStage().setScene(scene);
             } catch (IOException e) {
                 Main.log(Level.WARNING, e);
             }
@@ -48,6 +48,7 @@ public class AddDisplay {
         else{
             if(controller instanceof Dependable){
                 dependencyRegistry.add(((Dependable) controller).getDependency());
+                getStage().close();
             }
             else{
                 throw new IllegalStateException("Controller not instance of Dependable");

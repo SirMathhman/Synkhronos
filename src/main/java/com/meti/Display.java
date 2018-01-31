@@ -60,6 +60,8 @@ public class Display implements Initializable {
             stage.setTitle("Add a Dependency");
             stage.setScene(scene);
             stage.show();
+
+            display.setStage(stage);
         } catch (Exception e) {
             log(Level.SEVERE, "Failed to load add wizard", e);
         }
