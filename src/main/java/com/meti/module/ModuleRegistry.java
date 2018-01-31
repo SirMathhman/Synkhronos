@@ -26,30 +26,31 @@ public class ModuleRegistry {
         } else {
             if (location.getPath().contains("jar")) {
                 //load from jar
-                URL url = location.toURI().toURL();
-                JarURLConnection connection = (JarURLConnection) url.openConnection();
+                URL fileURL = new URL("file:" + location.toString());
+                URL jarURL = new URL("jar", "", fileURL + "!/");
+                JarURLConnection connection = (JarURLConnection) jarURL.openConnection();
                 Attributes attributes = connection.getMainAttributes();
                 String mainClassName = attributes.getValue(Attributes.Name.MAIN_CLASS);
 
-                ClassLoader classLoader = new URLClassLoader(new URL[]{url});
+                ClassLoader classLoader = new URLClassLoader(new URL[]{fileURL});
 
                 Class<?> mainClass = classLoader.loadClass(mainClassName);
                 Method mainMethod = mainClass.getMethod("main", String[].class);
                 int mainModifiers = mainMethod.getModifiers();
-                if (mainMethod.getReturnType() != void.class || Modifier.isStatic(mainModifiers) || !Modifier.isPublic(mainModifiers)) {
-                    throw new NoSuchMethodException("Cannot find main method");
+                if (mainMethod.getReturnType() != void.class || !Modifier.isStatic(mainModifiers) || !Modifier.isPublic(mainModifiers)) {
+                    throw new NoSuchMethodException("Cannot find main method in class " + mainClassName);
                 }
 
                 Method getLocationMethod = mainClass.getMethod("getLocation");
                 int locationModifiers = getLocationMethod.getModifiers();
-                if (getLocationMethod.getReturnType() != null || !Modifier.isStatic(locationModifiers) || !Modifier.isPublic(locationModifiers)) {
-                    throw new NoSuchMethodException("Cannot find getLocation method");
+                if (getLocationMethod.getReturnType() == null || !Modifier.isStatic(locationModifiers) || !Modifier.isPublic(locationModifiers)) {
+                    throw new NoSuchMethodException("Cannot find getLocation method in class " + mainClassName);
                 }
 
-                mainMethod.invoke(null, new Object[]{});
+                mainMethod.invoke(null, "");
                 Object invokeToken = getLocationMethod.invoke(null);
                 if (invokeToken instanceof URL) {
-                    Module module = new Module(url, mainClassName, (URL) invokeToken);
+                    Module module = new Module(fileURL, mainClassName, (URL) invokeToken);
                     addModule(module);
                 } else {
                     throw new NoSuchMethodException("getLocation does not return a URL");
