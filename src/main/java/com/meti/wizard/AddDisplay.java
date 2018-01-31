@@ -7,8 +7,10 @@ import com.meti.module.ModuleRegistry;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -24,6 +26,7 @@ public class AddDisplay {
     @FXML
     private AnchorPane moduleOptions;
     private Object controller;
+    private Module selectedModule;
 
     public void setDependencyRegistry(DependencyRegistry dependencyRegistry) {
         this.dependencyRegistry = dependencyRegistry;
@@ -31,11 +34,24 @@ public class AddDisplay {
 
     @FXML
     public void next() {
-        if(controller instanceof Dependable){
-            dependencyRegistry.add(((Dependable) controller).getDependency());
+        if (selectedModule.getDisplayLocation() != null) {
+            try {
+                Parent parent = FXMLLoader.load(selectedModule.getDisplayLocation());
+                Scene scene = new Scene(parent);
+                Stage stage = new Stage();
+                stage.setScene(scene);
+                stage.show();
+            } catch (IOException e) {
+                Main.log(Level.WARNING, e);
+            }
         }
         else{
-            throw new IllegalStateException("Controller not instance of Dependable");
+            if(controller instanceof Dependable){
+                dependencyRegistry.add(((Dependable) controller).getDependency());
+            }
+            else{
+                throw new IllegalStateException("Controller not instance of Dependable");
+            }
         }
     }
 
@@ -51,10 +67,10 @@ public class AddDisplay {
     @FXML
     public void moduleSelected() {
         String name = moduleView.getSelectionModel().getSelectedItem();
-        Module module = moduleRegistry.getModule(name);
+        selectedModule = moduleRegistry.getModule(name);
 
         try {
-            FXMLLoader loader = new FXMLLoader(module.getOptionsLocation());
+            FXMLLoader loader = new FXMLLoader(selectedModule.getOptionsLocation());
             Parent parent = loader.load();
             controller = loader.getController();
             moduleOptions.getChildren().add(parent);
