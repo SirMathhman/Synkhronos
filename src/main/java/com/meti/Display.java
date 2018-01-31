@@ -13,13 +13,11 @@ import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 
-import static com.meti.Main.*;
+import static com.meti.Main.log;
 
 public class Display implements Initializable {
     private final URL addLocation = getClass().getResource("wizard\\AddDisplay.fxml");
@@ -91,6 +89,8 @@ public class Display implements Initializable {
                 if (moduleDirectory.mkdirs()) {
                     log(Level.FINE, "Created module directory");
                 }
+
+                Default.loadModules(moduleRegistry);
             }
         } catch (Exception e) {
             log(Level.WARNING, "Failed to load modules", e);

@@ -1,3 +1,5 @@
+package com.meti;
+
 import com.meti.URLDisplay;
 
 import java.net.URL;

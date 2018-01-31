@@ -25,7 +25,7 @@ public class ModuleRegistry {
                 //load from jar
                 URL fileURL = new URL("file:" + file.toString());
                 ClassLoader classLoader = new URLClassLoader(new URL[]{fileURL});
-                Class<?> c = classLoader.loadClass("Index");
+                Class<?> c = classLoader.loadClass("com.meti.Index");
                 Method locationMethod = c.getMethod("getLocation");
                 Method nameMethod = c.getMethod("getName");
 
