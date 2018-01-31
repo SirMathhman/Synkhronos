@@ -59,8 +59,8 @@ public class Main extends Application {
             primaryStage.setTitle("Synkhronos");
             primaryStage.setScene(scene);
             primaryStage.show();
-        } catch (IOException e) {
-            log(Level.SEVERE, e);
+        } catch (Exception e) {
+            log(Level.SEVERE, "Failed to load display", e);
         }
     }
 
